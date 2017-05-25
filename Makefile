@@ -241,8 +241,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
-HOSTCXXFLAGS = -O2
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fomit-frame-pointer
+HOSTCXXFLAGS = -O3 -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -346,11 +346,11 @@ CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   =
-AFLAGS_MODULE   =
-LDFLAGS_MODULE  =
-CFLAGS_KERNEL	=
-AFLAGS_KERNEL	=
+CFLAGS_MODULE   = -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+AFLAGS_MODULE   = -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+LDFLAGS_MODULE  = -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+CFLAGS_KERNEL	= -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+AFLAGS_KERNEL	= -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
 
@@ -378,11 +378,11 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -fno-delete-null-pointer-checks
-KBUILD_AFLAGS_KERNEL :=
-KBUILD_CFLAGS_KERNEL :=
+KBUILD_AFLAGS_KERNEL := -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+KBUILD_CFLAGS_KERNEL := -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
 KBUILD_AFLAGS   := -D__ASSEMBLY__
-KBUILD_AFLAGS_MODULE  := -DMODULE
-KBUILD_CFLAGS_MODULE  := -DMODULE
+KBUILD_AFLAGS_MODULE  := -DMODULE -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
+KBUILD_CFLAGS_MODULE  := -DMODULE -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -577,7 +577,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O3
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
