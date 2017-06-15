@@ -48,7 +48,7 @@
 static struct drv2605_data *pDRV2605data = NULL;
 
 /* Vibrator Voltage Control */
-static int voltage_control;
+static int voltage_control = 0x78;
 module_param_named(vibrator_volt, voltage_control, int, 0644);
 
 static int drv2605_reg_read(struct drv2605_data *pDrv2605data, unsigned int reg)
